@@ -6,10 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Use the public Jupiter API endpoint hosted by QuickNode
 const JUPITER_API = 'https://public.jupiterapi.com';
 
-// Simple HTTPS fetch helper that works on all Node versions
 function httpsFetch(url, options = {}) {
   return new Promise((resolve, reject) => {
     const urlObj = new URL(url);
@@ -52,13 +50,13 @@ function httpsFetch(url, options = {}) {
 }
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'SolSniper Jupiter Proxy', version: '3.0', endpoint: JUPITER_API });
+  res.json({ status: 'ok', service: 'SolSniper Jupiter Proxy', version: '4.0' });
 });
 
 app.get('/jupiter/quote', async (req, res) => {
   try {
     const params = new URLSearchParams(req.query).toString();
-    const url = `${JUPITER_API}/v6/quote?${params}`;
+    const url = `${JUPITER_API}/quote?${params}`;
     console.log('Fetching quote:', url);
     
     const response = await httpsFetch(url);
@@ -75,7 +73,7 @@ app.get('/jupiter/quote', async (req, res) => {
 
 app.post('/jupiter/swap', async (req, res) => {
   try {
-    const url = `${JUPITER_API}/v6/swap`;
+    const url = `${JUPITER_API}/swap`;
     console.log('Fetching swap transaction');
     
     const response = await httpsFetch(url, {
@@ -94,4 +92,4 @@ app.post('/jupiter/swap', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Jupiter Proxy v3 running on port ${PORT} -> ${JUPITER_API}`));
+app.listen(PORT, () => console.log(`Jupiter Proxy v4 running on port ${PORT}`));
